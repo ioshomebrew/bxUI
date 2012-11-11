@@ -65,12 +65,12 @@ void MainWindow::on_Create_clicked()
     QMessageBox Finished;
     QString Message;
     QProcess bximage;
-    QString program = "C:/Program Files (x86)/Bochs-2.5.1/bximage.exe";
     QStringList arguments;
     int size2;
     bool ok;
     size_t BufSize = 1024;
     char buf[BufSize];
+    QString currentPath;
 
     // make size argument
     size2 = Size.toInt(&ok, 10);
@@ -86,15 +86,22 @@ void MainWindow::on_Create_clicked()
     for(int count = 0; count < 5; count++)
         qDebug() << arguments[count];
 
+    // print current path
+    currentPath = QDir::currentPath();
+    qDebug() << currentPath;
+
+    // start bximage
+    bximage.setReadChannel(QProcess::StandardOutput);
+    bximage.setWorkingDirectory(QString(QDir::currentPath()));
+    bximage.start("bximage", arguments);
+    bximage.waitForStarted(-1);
+
     // make messagebox
     Message = path + QString(" has been created");
     Finished.setWindowTitle("Finished");
     Finished.setText(Message);
     Finished.setIcon(QMessageBox::Information);
     Finished.exec();
-
-    // start bximage
-    bximage.start(program, arguments);
 }
 
 // when Type changed
