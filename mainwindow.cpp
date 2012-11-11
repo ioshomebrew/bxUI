@@ -62,6 +62,8 @@ void MainWindow::on_Browse_clicked()
 void MainWindow::on_Create_clicked()
 {
     // declarations
+    QMessageBox Finished;
+    QString Message;
     QProcess bximage;
     QString program = "C:/Program Files (x86)/Bochs-2.5.1/bximage.exe";
     QStringList arguments;
@@ -83,6 +85,13 @@ void MainWindow::on_Create_clicked()
     // print arguments
     for(int count = 0; count < 5; count++)
         qDebug() << arguments[count];
+
+    // make messagebox
+    Message = path + QString(" has been created");
+    Finished.setWindowTitle("Finished");
+    Finished.setText(Message);
+    Finished.setIcon(QMessageBox::Information);
+    Finished.exec();
 
     // start bximage
     bximage.start(program, arguments);
